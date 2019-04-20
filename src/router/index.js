@@ -2,6 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
 import Home from '@/components/Home'
+import Pomp from '@/components/Pomp'
+import Tankstration from '@/components/Tankstation'
+import Administratie from '@/components/Shell/Administratie'
+import Coupon from '@/components/Shell/Coupon'
+import Geschiedenis from '@/components/Shell/Geschiedenis'
 
 Vue.use(Router)
 export const router = new Router({
@@ -9,6 +14,12 @@ export const router = new Router({
   routes: [
     { path: '/', component: Login },
     { path: '/home', component: Home },
+    { path: '/pomp', component: Pomp },
+    { path: '/tankstation', component: Tankstration },
+    { path: '/administratie', component: Administratie },
+    { path: '/coupon', component: Coupon },
+    { path: '/geschiedenis', component: Geschiedenis },
+
     // otherwise redirect to home
     { path: '*', redirect: '/' }
   ]
