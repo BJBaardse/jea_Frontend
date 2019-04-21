@@ -1,8 +1,9 @@
 <template>
   <div>
     <navbar></navbar>
+    <h1>Tank Pomp:</h1>
     <div class="col-md-6">
-      <h1>Brandstof:</h1>
+      <h3>Brandstof:</h3>
       <ul class="list-group">
         <a href="#" class="list-group-item list-group-item-action flex-column align-items-start"
            v-for="brandstof in brandstoffen" :class="{active:brandstof.id == selectedbrandstof}"
@@ -24,7 +25,8 @@
       </div>
       <div>
         <button v-on:click="couponclicked">Coupon</button>
-        <input v-if="couponselect == true" type="text" class="form-control" id="coupon" placeholder="Coupon Code">
+        <input v-if="couponselect == true" v-model="coupontext" type="text" class="form-control" id="coupon"
+               placeholder="Coupon Code">
       </div>
     </div>
 
@@ -61,6 +63,7 @@
         selectedtankstation: null,
         couponselect: false,
         volumeEntered: false,
+        coupontext: "",
         volume: 0
       }
     },
@@ -108,24 +111,57 @@
         }
       },
       tankstationclicked: function (tankstation) {
-        this.selectedtankstation = tankstation.id;
-        axios.post(`http://localhost:8080/testing/resources/tankbeurt/createnocoupon`, qs.stringify({
-            'brandstof': this.selectedbrandstof,
-            'liter': this.volume.valueOf(),
-            'token': localStorage.getItem('token')
-          }))
-          .then(response => {
-            if (response.status == 200) {
-              alert("Succesful");
-            }
-            location.reload();
-          })
-          .catch(function (error) {
-            if (error.response.status == 403) {
-              alert("Incorrect credentials");
-            }
-          })
+        if (this.couponselect == false) {
+          this.selectedtankstation = tankstation.id;
+          axios.post(`http://localhost:8080/testing/resources/tankbeurt/createnocoupon`, qs.stringify({
+              'brandstof': this.selectedbrandstof,
+              'liter': this.volume.valueOf(),
+              'token': localStorage.getItem('token'),
+              'tankstation': tankstation.id
+            }),
+            {
+              headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+              }
+            })
+            .then(response => {
+              if (response.status == 200) {
+                alert("Succesful");
+              }
+              location.reload();
+            })
+            .catch(function (error) {
+              if (error.response.status == 403) {
+                alert("Incorrect credentials");
+              }
+            })
 
+        } else {
+          this.selectedtankstation = tankstation.id;
+          axios.post(`http://localhost:8080/testing/resources/tankbeurt/createwithcoupon`, qs.stringify({
+              'brandstof': this.selectedbrandstof,
+              'liter': this.volume.valueOf(),
+              'coupon': this.coupontext,
+              'token': localStorage.getItem('token'),
+              'tankstation': tankstation.id
+            }),
+            {
+              headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+              }
+            })
+            .then(response => {
+              if (response.status == 200) {
+                alert("Succesful");
+              }
+              location.reload();
+            })
+            .catch(function (error) {
+              if (error.response.status == 403) {
+                alert("Incorrect credentials");
+              }
+            })
+        }
       }
     }
   }

@@ -2,7 +2,7 @@
   <div>
     <navbar></navbar>
   <b-list-group >
-    <b-list-group-item href="#" active class="flex-column align-items-start" v-for="user in users">
+    <b-list-group-item href="#" active class="flex-column align-items-start" v-for="user in users" :key="user.id">
       <div class="d-flex w-100 justify-content-between">
         <h5 class="mb-1">username: {{user.username}}</h5>
         <small>{{user.role}}</small>
