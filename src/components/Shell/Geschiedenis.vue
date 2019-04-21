@@ -4,7 +4,7 @@
     <h1>Geschiedenis Pagina</h1>
     <div class="row">
       <div class="col-md-6">
-        <h3>Open Orders:</h3>
+        <h3>Completed Orders:</h3>
         <ul class="list-group">
           <a href="#" class="list-group-item list-group-item-action flex-column align-items-start"
              v-for="beurt in tankbeurten" :key="beurt.id" :class="{active:beurt.id == selectedTankbeurt.id}"
@@ -64,6 +64,7 @@
     data() {
       return {
         tankbeurten: [],
+        tankbeurtselected: '',
         selectedTankbeurt: ''
       }
     },
