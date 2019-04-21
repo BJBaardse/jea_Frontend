@@ -45,8 +45,9 @@
             <h4>
               {{selectedBeurtPrijs}} euro
             </h4>
+            <br><br><br>
+            <button type="button" class="btn btn-outline-primary" v-on:click="betalingAfronden">Betaling afronden</button>
           </div>
-
         </div>
       </div>
     </div>
@@ -95,7 +96,28 @@
         this.selectedBeurtTime = tankbeurt.created;
         this.tankbeurtselected = true;
         this.selectedTankbeurt = tankbeurt;
-
+      },
+      betalingAfronden: function () {
+        console.log(qs.stringify({'tankbeurtid': this.selectedTankbeurt}));
+        axios.post(`http://localhost:8080/testing/resources/tankbeurt/afronden/`, qs.stringify({
+            'tankbeurtid': this.selectedTankbeurt.id
+          }),
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(response => {
+            if (response.status == 204) {
+              alert("Succesful");
+            }
+            location.reload();
+          })
+          .catch(function (error) {
+            if (error.response.status == 403) {
+              alert("Incorrect credentials");
+            }
+          })
       }
     }
   }

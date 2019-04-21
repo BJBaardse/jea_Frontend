@@ -154,11 +154,17 @@
               if (response.status == 200) {
                 alert("Succesful");
               }
+              else {
+
+              }
               location.reload();
             })
             .catch(function (error) {
               if (error.response.status == 403) {
-                alert("Incorrect credentials");
+                alert("No rights to load data");
+              }
+              else if(error.response.status == 400){
+                alert("Coupon code invalid")
               }
             })
         }
