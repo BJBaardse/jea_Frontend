@@ -7,6 +7,7 @@ import Tankstration from '@/components/Tankstation'
 import Administratie from '@/components/Shell/Administratie'
 import Coupon from '@/components/Shell/Coupon'
 import Geschiedenis from '@/components/Shell/Geschiedenis'
+import factor2 from '@/components/twofactorpage.vue'
 
 Vue.use(Router)
 export const router = new Router({
@@ -19,6 +20,7 @@ export const router = new Router({
     { path: '/administratie', component: Administratie },
     { path: '/coupon', component: Coupon },
     { path: '/geschiedenis', component: Geschiedenis },
+    { path: '/2factor', component: factor2 },
 
     // otherwise redirect to home
     { path: '*', redirect: '/' }

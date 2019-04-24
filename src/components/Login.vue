@@ -9,6 +9,7 @@
       <label for="inputPassword" class="sr-only">Password</label>
       <input type="password" v-model="password" id="inputPassword" class="form-control" placeholder="Password"
              required="">
+      <input type="text" v-model="fa2" id="input2fa" class="form-control" placeholder="2 Factor Key">
       <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
       <p class="mt-5 mb-3 text-muted">© 2019</p>
     </form>
@@ -28,14 +29,16 @@
       return {
         email: '',
         password: '',
-        errors: []
+        errors: [],
+        fa2: ''
       }
     },
     methods: {
       dopost: function () {
         axios.post(`http://localhost:8080/testing/resources/authentication`, qs.stringify({
           'username': this.email,
-          'password': this.password
+          'password': this.password,
+          'factor2': this.fa2
         }))
           .then(response => {
             localStorage.setItem('token', response.data);
