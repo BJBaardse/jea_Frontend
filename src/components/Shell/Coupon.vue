@@ -63,19 +63,23 @@
       }
     },
     mounted() {
-      axios.get(`http://localhost:8080/testing/resources/coupon/`, {
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token')
-        }
-      })
-        .then(response => {
-          this.Coupons = response.data;
-        })
-        .catch(function (error) {
-          alert("No rights");
-        })
+      this.loadCoupons();
     },
     methods: {
+      loadCoupons: function(){
+        axios.get(`http://localhost:8080/testing/resources/coupon/`, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token')
+          }
+        })
+          .then(response => {
+            this.Coupons = response.data;
+            this.selectedCoupon = '';
+          })
+          .catch(function (error) {
+            alert("No rights");
+          })
+      },
       couponClicked: function (coupon) {
         axios.post(`http://localhost:8080/testing/resources/coupon/afronden/`, qs.stringify({
             'couponid': coupon.id
@@ -89,7 +93,7 @@
             if (response.status == 204) {
               alert("Succesful");
             }
-            location.reload();
+            this.loadCoupons();
           })
           .catch(function (error) {
             if (error.response.status == 403) {

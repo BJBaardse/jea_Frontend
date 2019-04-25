@@ -10,6 +10,7 @@ Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.component('navbar', navbar)
 
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

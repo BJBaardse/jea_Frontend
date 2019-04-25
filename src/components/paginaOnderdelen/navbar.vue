@@ -14,6 +14,7 @@
           </b-nav-item-dropdown>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
+          <b-nav-item href="#"v-bind:to="'tankstation'" >{{TimerString}}</b-nav-item>
           <b-nav-item-dropdown text="Gebruiker" right>
             <b-dropdown-item href="#" v-on:click="Logout">Uitloggen</b-dropdown-item>
             <b-dropdown-item href="#" v-bind:to="'2factor'">2 Factor Setup</b-dropdown-item>
@@ -31,12 +32,31 @@
   export default {
     name: 'navbar',
     data() {
-      return {}
+      return {
+        TimerString: 'test',
+        logs: [],
+        status: "disconnected"
+      }
+    },
+    mounted () {
+      this.connect()
     },
     methods: {
       Logout: function () {
         localStorage.removeItem('token');
         this.$router.push('/');
+      },
+      connect() {
+        this.socket = new WebSocket("ws://localhost:8080/testing/clock");
+        this.socket.onopen = () => {
+          this.status = "connected";
+          this.logs.push({ event: "Connected to", data: 'ws://localhost:8080/testing/clock'})
+          this.socket.onmessage = ({data}) => {
+            const o = JSON.parse(data)
+            console.log(o);
+            this.TimerString = o;
+          };
+        };
       }
     }
   }
