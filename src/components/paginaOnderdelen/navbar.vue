@@ -14,7 +14,7 @@
           </b-nav-item-dropdown>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item href="#"v-bind:to="'tankstation'" >{{TimerString}}</b-nav-item>
+          <b-nav-item href="#">{{TimerString}}</b-nav-item>
           <b-nav-item-dropdown text="Gebruiker" right>
             <b-dropdown-item href="#" v-on:click="Logout">Uitloggen</b-dropdown-item>
             <b-dropdown-item href="#" v-bind:to="'2factor'">2 Factor Setup</b-dropdown-item>
@@ -47,14 +47,14 @@
         this.$router.push('/');
       },
       connect() {
-        this.socket = new WebSocket("ws://localhost:8080/testing/clock");
+        this.socket = new WebSocket("ws://127.0.0.1:8080/testing/clock");
         this.socket.onopen = () => {
           this.status = "connected";
-          this.logs.push({ event: "Connected to", data: 'ws://localhost:8080/testing/clock'})
+          this.logs.push({ event: "Connected to", data: 'ws://127.0.0.1:8080/testing/clock'})
           this.socket.onmessage = ({data}) => {
-            const o = JSON.parse(data)
+            const o = data;
             console.log(o);
-            this.TimerString = o;
+            this.TimerString = data;
           };
         };
       }
