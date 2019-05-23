@@ -14,7 +14,15 @@
           </b-nav-item-dropdown>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item href="#">{{TimerString}}</b-nav-item>
+          <b-nav-item href="#" v-if="disconnected == false" v-on:click="unconnect()">STAHP</b-nav-item>
+          <b-nav-item href="#" v-else v-on:click="connect()">Reconnect</b-nav-item>
+          <b-nav-item-dropdown v-bind:text="TimerString" right>
+            <b-dropdown-item href="#" v-on:click="intervalchange(1000)">1 Sec</b-dropdown-item>
+            <b-dropdown-item href="#" v-on:click="intervalchange(2000)">2 Sec</b-dropdown-item>
+            <b-dropdown-item href="#" v-on:click="intervalchange(5000)">5 Sec</b-dropdown-item>
+            <b-dropdown-item href="#" v-on:click="intervalchange(10000)">10 Sec</b-dropdown-item>
+          </b-nav-item-dropdown>
+
           <b-nav-item-dropdown text="Gebruiker" right>
             <b-dropdown-item href="#" v-on:click="Logout">Uitloggen</b-dropdown-item>
             <b-dropdown-item href="#" v-bind:to="'2factor'">2 Factor Setup</b-dropdown-item>
@@ -35,7 +43,9 @@
       return {
         TimerString: 'test',
         logs: [],
-        status: "disconnected"
+        status: "disconnected",
+        interval: 1000,
+        disconnected: false
       }
     },
     mounted () {
@@ -56,6 +66,19 @@
             console.log(o);
             this.TimerString = data;
           };
+        };
+        this.disconnected = false;
+      },
+      unconnect(){
+        this.socket.close();
+        this.disconnected = true;
+      },
+      intervalchange(seconden){
+        this.socket.send(seconden);
+        this.socket.onmessage = ({data}) => {
+          const o = data;
+          console.log(o);
+          this.TimerString = data;
         };
       }
     }
